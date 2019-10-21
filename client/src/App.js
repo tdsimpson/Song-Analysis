@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 
 import SpotifyWebApi from 'spotify-web-api-js';
+import { strict } from 'assert';
 const spotifyApi = new SpotifyWebApi();
 
 class App extends Component {
@@ -29,6 +30,7 @@ class App extends Component {
     return hashParams;
   }
 
+
   getNowPlaying() {
     spotifyApi.getMyCurrentPlaybackState()
       .then((response) => {
@@ -42,6 +44,15 @@ class App extends Component {
         });
       })
   }
+
+  formatReleaseDate(date) {
+    let months = ["January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"];
+
+    let selectedMonthName = months[parseInt(date.slice(5, 7) - 1)]
+    return selectedMonthName + " " + date.slice(8, 10) + ", " + date.slice(0, 4);
+  }
+
   render() {
     return (
       <div className="App">
@@ -56,7 +67,7 @@ class App extends Component {
           <img src={this.state.nowPlaying.albumArt} alt="Album art not found" style={{ height: 150 }} />
         </div>
         <div>
-          Release Date: {this.state.nowPlaying.releaseDate}
+          {this.formatReleaseDate(this.state.nowPlaying.releaseDate)}
         </div>
         {this.state.loggedIn &&
           <button onClick={() => this.getNowPlaying()}>
