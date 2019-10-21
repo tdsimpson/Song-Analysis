@@ -14,7 +14,7 @@ class App extends Component {
     }
     this.state = {
       loggedIn: token ? true : false,
-      nowPlaying: { name: 'Not Checked', artist: '', albumArt: '' }
+      nowPlaying: { name: 'Not Checked', artist: '', albumArt: '', releaseDate: '' }
     }
   }
   getHashParams() {
@@ -36,7 +36,8 @@ class App extends Component {
           nowPlaying: {
             name: response.item.name,
             albumArt: response.item.album.images[0].url,
-            artist: response.item.artists[0].name
+            artist: response.item.artists[0].name,
+            releaseDate: response.item.album.release_date
           }
         });
       })
@@ -53,6 +54,9 @@ class App extends Component {
         </div>
         <div>
           <img src={this.state.nowPlaying.albumArt} alt="Album art not found" style={{ height: 150 }} />
+        </div>
+        <div>
+          Release Date: {this.state.nowPlaying.releaseDate}
         </div>
         {this.state.loggedIn &&
           <button onClick={() => this.getNowPlaying()}>
