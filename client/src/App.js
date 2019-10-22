@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import './App.css';
 
 import SpotifyWebApi from 'spotify-web-api-js';
-import { strict } from 'assert';
 const spotifyApi = new SpotifyWebApi();
+
+const searchUrl = "https://en.wikipedia.org/w/api.php?action=opensearch&format=json&search="; // site that doesn’t send Access-Control-*
 
 class App extends Component {
   constructor() {
@@ -15,9 +16,10 @@ class App extends Component {
     }
     this.state = {
       loggedIn: token ? true : false,
-      nowPlaying: { name: 'Not Checked', artist: '', albumArt: '', releaseDate: '' }
+      nowPlaying: { name: 'Not Checked', artist: '', albumArt: '', releaseDate: '' },
     }
   }
+
   getHashParams() {
     var hashParams = {};
     var e, r = /([^&;=]+)=?([^&;]*)/g,
@@ -29,7 +31,6 @@ class App extends Component {
     }
     return hashParams;
   }
-
 
   getNowPlaying() {
     spotifyApi.getMyCurrentPlaybackState()
@@ -46,16 +47,35 @@ class App extends Component {
   }
 
   formatReleaseDate(date) {
-    let months = ["January", "February", "March", "April", "May", "June",
+    let selectMonth = ["January", "February", "March", "April", "May", "June",
       "July", "August", "September", "October", "November", "December"];
 
-    let selectedMonthName = months[parseInt(date.slice(5, 7) - 1)]
-    return selectedMonthName + " " + date.slice(8, 10) + ", " + date.slice(0, 4);
+    let month = selectMonth[parseInt(date.slice(5, 7) - 1)]
+    let day = date.slice(8, 10)
+    let year = date.slice(0, 4)
+    return month + " " + day + " " + year;
   }
 
+  getWiki(term) {
+    const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    fetch(proxyurl + searchUrl + "/" + term) // https://cors-anywhere.herokuapp.com/https://example.com
+      .then(response => response.text())
+      .then(contents => { console.log(contents) }
+      )
+      .catch(() => console.log("Can’t access " + searchUrl + " response. Blocked by browser?"))
+  }
+
+
   render() {
+
+    // // var { items = [] } = this.props;
+    // // var { isLoaded } = this.state;
+    // // if (!isLoaded) {
+    //   return <div> Loading...</div>;
+    // }
+    // else {
     return (
-      <div className="App">
+      <div className="App" >
         <a href='http://localhost:8888' > Login to Spotify </a>
         <div>
           Now Playing: {this.state.nowPlaying.name}
@@ -69,14 +89,20 @@ class App extends Component {
         <div>
           {this.formatReleaseDate(this.state.nowPlaying.releaseDate)}
         </div>
+
+        <div>
+          {this.getWiki(this.state.nowPlaying.artist)}
+        </div>
+
         {this.state.loggedIn &&
           <button onClick={() => this.getNowPlaying()}>
             Check Now Playing
           </button>
         }
-      </div>
+      </div >
     );
   }
 }
+//}
 
 export default App;
