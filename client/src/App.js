@@ -21,6 +21,7 @@ class App extends Component {
     }
   }
 
+  //Function given in Spotify API used to create a random hash for the access token
   getHashParams() {
     var hashParams = {};
     var e, r = /([^&;=]+)=?([^&;]*)/g,
@@ -33,6 +34,7 @@ class App extends Component {
     return hashParams;
   }
 
+  //Setting the state of the current song details from the Spotify API
   getNowPlaying() {
     spotifyApi.getMyCurrentPlaybackState()
       .then((response) => {
@@ -47,6 +49,7 @@ class App extends Component {
       })
   }
 
+  //Formatting the realse date from dd/mm/yyyy to mm dd, yyyy 
   formatReleaseDate(date) {
     let selectMonth = ["January", "February", "March", "April", "May", "June",
       "July", "August", "September", "October", "November", "December"];
@@ -57,6 +60,8 @@ class App extends Component {
     return month + " " + day + ", " + year;
   }
 
+  // takes in an artist name as a search term and uses the 
+  //wikipedia api to get a JSON response of a description snippet
   getWiki(term) {
     const proxyurl = "https://cors-anywhere.herokuapp.com/";
     fetch(proxyurl + searchUrl + "/" + term)
@@ -76,25 +81,31 @@ class App extends Component {
     return (
       <div className="App" >
         <a href='http://localhost:8888' > Login to Spotify </a>
+
+        {/* Song name */}
         <div>
           Now Playing: {this.state.nowPlaying.name}
         </div>
+
+        {/* Artist name */}
         <div>
           Artist: {this.state.nowPlaying.artist}
         </div>
+
+        {/* Rendering the album art */}
         <div>
           <img src={this.state.nowPlaying.albumArt} alt="Album art not found" style={{ height: 150 }} />
         </div>
+
+        {/* Function call to format the realse date from dd/mm/yyyy to mm dd, yyyy */}
         <div>
           {this.formatReleaseDate(this.state.nowPlaying.releaseDate)}
         </div>
 
+        {/* Calling a function to get the artist descriptoino form Wikipedia & rendering it */}
         <div>
-          {this.getWiki(this.state.nowPlaying.artist)}
-        </div>
-
-        <div>
-          {this.state.description}
+          {this.getWiki(this.state.nowPlaying.artist),
+            this.state.description}
         </div>
 
         {this.state.loggedIn &&
