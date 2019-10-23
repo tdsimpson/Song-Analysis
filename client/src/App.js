@@ -4,7 +4,7 @@ import './App.css';
 import SpotifyWebApi from 'spotify-web-api-js';
 const spotifyApi = new SpotifyWebApi();
 
-const searchUrl = "https://en.wikipedia.org/w/api.php?action=opensearch&format=json&search="; // site that doesn’t send Access-Control-*
+const searchUrl = "https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srsearch=";
 
 class App extends Component {
   constructor() {
@@ -17,6 +17,7 @@ class App extends Component {
     this.state = {
       loggedIn: token ? true : false,
       nowPlaying: { name: 'Not Checked', artist: '', albumArt: '', releaseDate: '' },
+      description: '',
     }
   }
 
@@ -53,27 +54,25 @@ class App extends Component {
     let month = selectMonth[parseInt(date.slice(5, 7) - 1)]
     let day = date.slice(8, 10)
     let year = date.slice(0, 4)
-    return month + " " + day + " " + year;
+    return month + " " + day + ", " + year;
   }
 
   getWiki(term) {
     const proxyurl = "https://cors-anywhere.herokuapp.com/";
-    fetch(proxyurl + searchUrl + "/" + term) // https://cors-anywhere.herokuapp.com/https://example.com
-      .then(response => response.text())
-      .then(contents => { console.log(contents) }
+    fetch(proxyurl + searchUrl + "/" + term)
+      .then(response => response.json())
+      .then(contents => {
+        // console.log(contents.query.search[0].snippet)
+        this.setState({
+          description: contents.query.search[0].snippet
+        });
+      }
       )
       .catch(() => console.log("Can’t access " + searchUrl + " response. Blocked by browser?"))
   }
 
 
   render() {
-
-    // // var { items = [] } = this.props;
-    // // var { isLoaded } = this.state;
-    // // if (!isLoaded) {
-    //   return <div> Loading...</div>;
-    // }
-    // else {
     return (
       <div className="App" >
         <a href='http://localhost:8888' > Login to Spotify </a>
@@ -94,6 +93,10 @@ class App extends Component {
           {this.getWiki(this.state.nowPlaying.artist)}
         </div>
 
+        <div>
+          {this.state.description}
+        </div>
+
         {this.state.loggedIn &&
           <button onClick={() => this.getNowPlaying()}>
             Check Now Playing
@@ -103,6 +106,5 @@ class App extends Component {
     );
   }
 }
-//}
 
 export default App;
