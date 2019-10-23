@@ -4,7 +4,9 @@ import './App.css';
 import SpotifyWebApi from 'spotify-web-api-js';
 const spotifyApi = new SpotifyWebApi();
 
-const searchUrl = "https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srsearch=";
+//const searchUrl = "https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srsearch=";
+const searchUrl = "https://en.wikipedia.org/w/api.php?action=opensearch&limit=20&format=json&search=";
+
 
 class App extends Component {
   constructor() {
@@ -67,15 +69,13 @@ class App extends Component {
     fetch(proxyurl + searchUrl + "/" + term)
       .then(response => response.json())
       .then(contents => {
-        // console.log(contents.query.search[0].snippet)
         this.setState({
-          description: contents.query.search[0].snippet
+          description: contents[2][0]
         });
       }
       )
       .catch(() => console.log("Can’t access " + searchUrl + " response. Blocked by browser?"))
   }
-
 
   render() {
     return (
@@ -102,10 +102,14 @@ class App extends Component {
           {this.formatReleaseDate(this.state.nowPlaying.releaseDate)}
         </div>
 
-        {/* Calling a function to get the artist descriptoino form Wikipedia & rendering it */}
+        {/* Calling a function to get the artist descriptoino form Wikipedia */}
         <div>
-          {this.getWiki(this.state.nowPlaying.artist),
-            this.state.description}
+          {this.getWiki(this.state.nowPlaying.artist)}
+        </div>
+
+        {/* Rendering description */}
+        <div>
+          {this.state.description}
         </div>
 
         {this.state.loggedIn &&
