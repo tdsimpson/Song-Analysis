@@ -4,7 +4,7 @@ import './App.css';
 import SpotifyWebApi from 'spotify-web-api-js';
 const spotifyApi = new SpotifyWebApi();
 
-//const searchUrl = "https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srsearch=";
+// Wikipedia API link
 const searchUrl = "https://en.wikipedia.org/w/api.php?action=opensearch&limit=20&format=json&search=";
 
 
@@ -62,8 +62,8 @@ class App extends Component {
     return month + " " + day + ", " + year;
   }
 
-  // takes in an artist name as a search term and uses the 
-  //wikipedia api to get a JSON response of a description snippet
+  //Takes in an artist name as a search term and uses the 
+  // Wikipedia API to get a JSON response of a description
   getWiki(term) {
     const proxyurl = "https://cors-anywhere.herokuapp.com/";
     fetch(proxyurl + searchUrl + "/" + term)
@@ -113,7 +113,7 @@ class App extends Component {
         </div>
 
         {this.state.loggedIn &&
-          <button onClick={() => this.getNowPlaying()}>
+          <button id="spotify-button" onClick={() => this.getNowPlaying()}>
             Check Now Playing
           </button>
         }
