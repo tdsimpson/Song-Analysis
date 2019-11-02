@@ -18,7 +18,7 @@ class App extends Component {
     }
     this.state = {
       loggedIn: token ? true : false,
-      nowPlaying: { name: 'Not Checked', artist: '', albumArt: '', releaseDate: '' },
+      nowPlaying: { name: 'Not Checked', artist: 'Not Checked', albumArt: '', releaseDate: '' },
       description: '',
     }
   }
@@ -94,12 +94,13 @@ class App extends Component {
 
         {/* Rendering the album art */}
         <div>
-          <img src={this.state.nowPlaying.albumArt} alt="Album art not found" style={{ height: 150 }} />
+          {this.state.nowPlaying.albumArt && <img src={this.state.nowPlaying.albumArt} alt="Album art not found" style={{ height: 150 }} />}
         </div>
 
         {/* Function call to format the realse date from dd/mm/yyyy to mm dd, yyyy */}
+        {/* && used to only show a date when it is available*/}
         <div>
-          {this.formatReleaseDate(this.state.nowPlaying.releaseDate)}
+          {this.state.nowPlaying.releaseDate && this.formatReleaseDate(this.state.nowPlaying.releaseDate)}
         </div>
 
         {/* Calling a function to get the artist descriptoino form Wikipedia */}
@@ -117,7 +118,7 @@ class App extends Component {
             Check Now Playing
           </button>
         }
-      </div >
+      </div>
     );
   }
 }
