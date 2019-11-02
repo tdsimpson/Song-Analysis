@@ -12,7 +12,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <Header />
+        <Header title="Song Analysis App" subtitle="Learn about the song you are currently listening to." />
         <SongInfo />
       </div>
     );
@@ -20,11 +20,15 @@ class App extends React.Component {
 }
 
 class Header extends React.Component {
+  constructor(props) {
+    super(props)
+  }
+
   render() {
     return (
       <div>
-        <h1>Song Analysis App</h1>
-        <h2>Learn about your current song</h2>
+        <h1>{this.props.title}</h1>
+        <h2>{this.props.subtitle}</h2>
       </div>
     );
   }
