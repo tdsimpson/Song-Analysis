@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './App.css';
+import './SongInfo.css';
 
 import SpotifyWebApi from 'spotify-web-api-js';
 const spotifyApi = new SpotifyWebApi();
@@ -8,7 +8,30 @@ const spotifyApi = new SpotifyWebApi();
 const searchUrl = "https://en.wikipedia.org/w/api.php?action=opensearch&limit=20&format=json&search=";
 
 
-class App extends Component {
+class App extends React.Component {
+  render() {
+    return (
+      <div>
+        <Header />
+        <SongInfo />
+      </div>
+    );
+  }
+}
+
+class Header extends React.Component {
+  render() {
+    return (
+      <div>
+        <h1>Song Analysis App</h1>
+        <h2>Learn about your current song</h2>
+      </div>
+    );
+  }
+}
+
+
+class SongInfo extends Component {
   constructor() {
     super();
     const params = this.getHashParams();
@@ -66,6 +89,7 @@ class App extends Component {
   // Wikipedia API to get a JSON response of a description
   getWiki(term) {
     const proxyurl = "https://cors-anywhere.herokuapp.com/";
+
     fetch(proxyurl + searchUrl + "/" + term)
       .then(response => response.json())
       .then(contents => {
@@ -92,7 +116,7 @@ class App extends Component {
           Artist: {this.state.nowPlaying.artist}
         </div>
 
-        {/* Rendering the album art */}
+        {/* Checking to see if there is alubm art and then rendering it if true*/}
         <div>
           {this.state.nowPlaying.albumArt && <img src={this.state.nowPlaying.albumArt} alt="Album art not found" style={{ height: 150 }} />}
         </div>
@@ -105,7 +129,9 @@ class App extends Component {
 
         {/* Calling a function to get the artist descriptoino form Wikipedia */}
         <div>
-          {this.getWiki(this.state.nowPlaying.artist)}
+          <button onClick={this.getWiki(this.state.nowPlaying.artist)}>
+            More info
+          </button>
         </div>
 
         {/* Rendering description */}
