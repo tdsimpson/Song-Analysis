@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './SongInfo.css';
+import './App.css';
 
 import SpotifyWebApi from 'spotify-web-api-js';
 const spotifyApi = new SpotifyWebApi();
@@ -20,14 +20,11 @@ class App extends React.Component {
 }
 
 class Header extends React.Component {
-  constructor(props) {
-    super(props)
-  }
   render() {
     return (
-      <div>
+      <div className="header">
         <h1>{this.props.title}</h1>
-        <h2>{this.props.subtitle}</h2>
+        <p>{this.props.subtitle}</p>
       </div>
     );
   }
@@ -43,8 +40,13 @@ class SongInfo extends Component {
     }
     this.state = {
       loggedIn: token ? true : false,
-      nowPlaying: { name: 'Not Checked', artist: 'Not Checked', albumArt: '', releaseDate: '' },
-      description: '',
+      nowPlaying: {
+        name: '',
+        artist: '',
+        albumArt: '',
+        releaseDate: ''
+      },
+      description: ''
     }
   }
 
@@ -102,20 +104,20 @@ class SongInfo extends Component {
       .catch(() => console.log("Can’t access " + searchUrl + " response. Blocked by browser?"))
   }
 
-
   render() {
     return (
-      <div className="App" >
-        <a href='http://localhost:8888' > Login to Spotify </a>
+      <div className="songInfo" >
+
+        {!this.state.loggedIn && <a href='http://localhost:8888' > Login to Spotify </a>}
 
         {/* Song name */}
         <div>
-          Now Playing: {this.state.nowPlaying.name}
+          {this.state.nowPlaying.name && <p>Now Playing: {this.state.nowPlaying.name}</p>}
         </div>
 
         {/* Artist name */}
         <div>
-          Artist: {this.state.nowPlaying.artist}
+          {this.state.nowPlaying.artist && <p>Artist: {this.state.nowPlaying.artist}</p>}
         </div>
 
         {/* Checking to see if there is alubm art and then rendering it if true*/}
@@ -131,18 +133,21 @@ class SongInfo extends Component {
 
         {/* Calling a function to get the artist descriptoino form Wikipedia */}
         <div>
-          <button onClick={() => this.getWiki(this.state.nowPlaying.artist)}>
-            More info
-          </button>
+          {this.state.nowPlaying.artist &&
+            <button
+              onClick={() => this.getWiki(this.state.nowPlaying.artist)}>
+              Artist Description
+          </button>}
         </div>
 
         {/* Rendering description */}
         <div>
-          {this.state.description}
+          <p>{this.state.description}</p>
         </div>
 
         {this.state.loggedIn &&
-          <button id="spotify-button" onClick={() => this.getNowPlaying()}>
+          <button id="spotify-button"
+            onClick={() => this.getNowPlaying()}>
             Check Now Playing
           </button>
         }
