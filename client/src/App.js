@@ -23,7 +23,6 @@ class Header extends React.Component {
   constructor(props) {
     super(props)
   }
-
   render() {
     return (
       <div>
@@ -33,7 +32,6 @@ class Header extends React.Component {
     );
   }
 }
-
 
 class SongInfo extends Component {
   constructor() {
@@ -89,11 +87,10 @@ class SongInfo extends Component {
     return month + " " + day + ", " + year;
   }
 
-  //Takes in an artist name as a search term and uses the 
+  // Takes in an artist name as a search term and uses the 
   // Wikipedia API to get a JSON response of a description
   getWiki(term) {
     const proxyurl = "https://cors-anywhere.herokuapp.com/";
-
     fetch(proxyurl + searchUrl + "/" + term)
       .then(response => response.json())
       .then(contents => {
@@ -104,6 +101,7 @@ class SongInfo extends Component {
       )
       .catch(() => console.log("Can’t access " + searchUrl + " response. Blocked by browser?"))
   }
+
 
   render() {
     return (
@@ -133,7 +131,7 @@ class SongInfo extends Component {
 
         {/* Calling a function to get the artist descriptoino form Wikipedia */}
         <div>
-          <button onClick={this.getWiki(this.state.nowPlaying.artist)}>
+          <button onClick={() => this.getWiki(this.state.nowPlaying.artist)}>
             More info
           </button>
         </div>
