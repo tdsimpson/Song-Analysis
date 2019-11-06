@@ -13,6 +13,7 @@ class SongInfo extends Component {
         if (token) {
             spotifyApi.setAccessToken(token);
         }
+
         this.state = {
             loggedIn: token ? true : false,
             nowPlaying: {
@@ -26,7 +27,7 @@ class SongInfo extends Component {
     }
 
     //Function given in Spotify API used to create a random hash for the access token
-    getHashParams() {
+    getHashParams = () => {
         var hashParams = {};
         var e, r = /([^&;=]+)=?([^&;]*)/g,
             q = window.location.hash.substring(1);
@@ -39,7 +40,7 @@ class SongInfo extends Component {
     }
 
     //Setting the state of the current song details from the Spotify API
-    getNowPlaying() {
+    getNowPlaying = () => {
         spotifyApi.getMyCurrentPlaybackState()
             .then((response) => {
                 this.setState({
@@ -54,7 +55,7 @@ class SongInfo extends Component {
     }
 
     //Formatting the realse date from dd/mm/yyyy to mm dd, yyyy 
-    formatReleaseDate(date) {
+    formatReleaseDate = (date) => {
         let selectMonth = ["January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"];
 
@@ -66,7 +67,7 @@ class SongInfo extends Component {
 
     // Takes in an artist name as a search term and uses the 
     // Wikipedia API to get a JSON response of a description
-    getWiki(term) {
+    getWiki = (term) => {
         const proxyurl = "https://cors-anywhere.herokuapp.com/";
         fetch(proxyurl + searchUrl + "/" + term)
             .then(response => response.json())
