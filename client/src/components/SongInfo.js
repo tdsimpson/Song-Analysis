@@ -43,12 +43,13 @@ class SongInfo extends Component {
     getNowPlaying = () => {
         spotifyApi.getMyCurrentPlaybackState()
             .then((response) => {
+                const { name, album, artists } = response.item;
                 this.setState({
                     nowPlaying: {
-                        name: response.item.name ? response.item.name : "No song currntly playing",
-                        albumArt: response.item.album.images[0].url ? response.item.album.images[0].url : "No song currently playing",
-                        artist: response.item.artists[0].name ? response.item.artists[0].name : 'No song currently plyaing',
-                        releaseDate: response.item.album.release_date ? response.item.album.release_date : "No release date"
+                        name: name,
+                        albumArt: album.images[0].url,
+                        artist: artists[0].name,
+                        releaseDate: album.release_date
                     }
                 });
             })
@@ -78,7 +79,9 @@ class SongInfo extends Component {
             }).catch(() => console.log("Can’t access " + searchUrl + " response. Blocked by browser?"))
     }
 
+
     render() {
+        const { name, artist, albumArt, releaseDate } = this.state.nowPlaying;
         return (
             <div className="songInfo" >
 
@@ -86,30 +89,30 @@ class SongInfo extends Component {
 
                 {/* Song name */}
                 <div>
-                    {this.state.nowPlaying.name && <p>Now Playing: {this.state.nowPlaying.name}</p>}
+                    {name && <p>Now Playing: {name}</p>}
                 </div>
 
                 {/* Artist name */}
                 <div>
-                    {this.state.nowPlaying.artist && <p>Artist: {this.state.nowPlaying.artist}</p>}
+                    {artist && <p>Artist: {artist}</p>}
                 </div>
 
                 {/* Checking to see if there is alubm art and then rendering it if true*/}
                 <div>
-                    {this.state.nowPlaying.albumArt && <img src={this.state.nowPlaying.albumArt} alt="Album art not found" style={{ height: 150 }} />}
+                    {albumArt && <img src={albumArt} alt="Album art not found" style={{ height: 150 }} />}
                 </div>
 
                 {/* Function call to format the realse date from dd/mm/yyyy to mm dd, yyyy */}
                 {/* && used to only show a date when it is available*/}
                 <div>
-                    {this.state.nowPlaying.releaseDate && this.formatReleaseDate(this.state.nowPlaying.releaseDate)}
+                    {releaseDate && this.formatReleaseDate(releaseDate)}
                 </div>
 
                 {/* Calling a function to get the artist descriptoino form Wikipedia */}
                 <div>
                     {this.state.nowPlaying.artist &&
                         <button
-                            onClick={() => this.getWiki(this.state.nowPlaying.artist)}>
+                            onClick={() => this.getWiki(artist)}>
                             Artist Description
                         </button>
                     }
@@ -120,8 +123,11 @@ class SongInfo extends Component {
                     <p>{this.state.description}</p>
                 </div>
 
+
                 {this.state.loggedIn &&
-                    <button id="spotify-button"
+                    <button
+                        id="spotify-button"
+                        disabled={false} // checking to see if anything is playing
                         onClick={() => this.getNowPlaying()}>
                         Check Now Playing
                     </button>
