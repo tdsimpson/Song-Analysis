@@ -45,10 +45,10 @@ class SongInfo extends Component {
             .then((response) => {
                 this.setState({
                     nowPlaying: {
-                        name: response.item.name,
-                        albumArt: response.item.album.images[0].url,
-                        artist: response.item.artists[0].name,
-                        releaseDate: response.item.album.release_date
+                        name: response.item.name ? response.item.name : "No song currntly playing",
+                        albumArt: response.item.album.images[0].url ? response.item.album.images[0].url : "No song currently playing",
+                        artist: response.item.artists[0].name ? response.item.artists[0].name : 'No song currently plyaing',
+                        releaseDate: response.item.album.release_date ? response.item.album.release_date : "No release date"
                     }
                 });
             })
@@ -75,9 +75,7 @@ class SongInfo extends Component {
                 this.setState({
                     description: contents[2][0]
                 });
-            }
-            )
-            .catch(() => console.log("Can’t access " + searchUrl + " response. Blocked by browser?"))
+            }).catch(() => console.log("Can’t access " + searchUrl + " response. Blocked by browser?"))
     }
 
     render() {
@@ -113,7 +111,8 @@ class SongInfo extends Component {
                         <button
                             onClick={() => this.getWiki(this.state.nowPlaying.artist)}>
                             Artist Description
-            </button>}
+                        </button>
+                    }
                 </div>
 
                 {/* Rendering description */}
@@ -125,7 +124,7 @@ class SongInfo extends Component {
                     <button id="spotify-button"
                         onClick={() => this.getNowPlaying()}>
                         Check Now Playing
-            </button>
+                    </button>
                 }
             </div>
         );
