@@ -16,6 +16,7 @@ class SongInfo extends Component {
 
         this.state = {
             loggedIn: token ? true : false,
+            currentlyPlaying: false,
             nowPlaying: {
                 name: '',
                 artist: '',
@@ -43,16 +44,20 @@ class SongInfo extends Component {
     getNowPlaying = () => {
         spotifyApi.getMyCurrentPlaybackState()
             .then((response) => {
-                const { name, album, artists } = response.item;
+                const { name = "nn", album = "na", artists = "naa" } = response.item;
                 this.setState({
+                    currentlyPlaying: true,
                     nowPlaying: {
                         name: name,
                         albumArt: album.images[0].url,
                         artist: artists[0].name,
                         releaseDate: album.release_date
                     }
-                });
-            })
+                })
+                console.log('song playing', this.state.currentlyPlaying)
+            }).catch(() => (this.setState({
+                currentlyPlaying: false
+            })));
     }
 
     //Formatting the realse date from dd/mm/yyyy to mm dd, yyyy 
@@ -79,13 +84,28 @@ class SongInfo extends Component {
             }).catch(() => console.log("Can’t access " + searchUrl + " response. Blocked by browser?"))
     }
 
+    componentDidMount() {
+        this.getNowPlaying();
+    }
+
+
 
     render() {
         const { name, artist, albumArt, releaseDate } = this.state.nowPlaying;
         return (
             <div className="songInfo" >
 
+                {this.state.currentlyPlaying ? '' : <p>No music playing</p>}
+
                 {!this.state.loggedIn && <a href='http://localhost:8888' > Login to Spotify </a>}
+
+                {this.state.loggedIn && this.state.currentlyPlaying &&
+                    <button
+                        id="spotify-button"
+                        onClick={() => this.getNowPlaying()}>
+                        Check Now Playing
+                    </button>
+                }
 
                 {/* Song name */}
                 <div>
@@ -110,7 +130,7 @@ class SongInfo extends Component {
 
                 {/* Calling a function to get the artist descriptoino form Wikipedia */}
                 <div>
-                    {this.state.nowPlaying.artist &&
+                    {artist &&
                         <button
                             onClick={() => this.getWiki(artist)}>
                             Artist Description
@@ -122,16 +142,6 @@ class SongInfo extends Component {
                 <div>
                     <p>{this.state.description}</p>
                 </div>
-
-
-                {this.state.loggedIn &&
-                    <button
-                        id="spotify-button"
-                        disabled={false} // checking to see if anything is playing
-                        onClick={() => this.getNowPlaying()}>
-                        Check Now Playing
-                    </button>
-                }
             </div>
         );
     }

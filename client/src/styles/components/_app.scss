@@ -20,11 +20,11 @@ div {
   text-decoration: none;
   display: inline-block;
   margin: 4px 2px;
-  cursor: pointer;
-  border-radius: 16px;
+  border-radius: 20px;
+  outline: 0;
 }
 
-#spotify-button:disabled {
-  opacity: .5;
-  cursor: default;
+#spotify-button:hover {
+  opacity: .75;
+  cursor: pointer;
 }
