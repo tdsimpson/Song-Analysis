@@ -28,3 +28,9 @@ div {
   opacity: .75;
   cursor: pointer;
 }
+
+.description {
+  max-width: 500px;
+  word-break: normal;
+  margin: auto;
+}

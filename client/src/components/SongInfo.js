@@ -140,7 +140,7 @@ class SongInfo extends Component {
 
                 {/* Rendering description */}
                 <div>
-                    <p>{this.state.description}</p>
+                    <p className="description"> {this.state.description}</p>
                 </div>
             </div>
         );
