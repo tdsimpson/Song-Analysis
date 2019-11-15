@@ -95,7 +95,7 @@ class SongInfo extends Component {
         return (
             <div className="songInfo" >
 
-                {this.state.currentlyPlaying ? '' : <p>No music playing</p>}
+                {!this.state.currentlyPlaying && this.state.loggedIn ? <p>No music playing</p> : ''}
 
                 {!this.state.loggedIn && <a href='http://localhost:8888' > Login to Spotify </a>}
 
@@ -132,6 +132,7 @@ class SongInfo extends Component {
                 <div>
                     {artist &&
                         <button
+                            className="description-button"
                             onClick={() => this.getWiki(artist)}>
                             Artist Description
                         </button>
