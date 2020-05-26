@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import SpotifyWebApi from 'spotify-web-api-js';
 const spotifyApi = new SpotifyWebApi();
 
-// Wikipedia API link
-const searchUrl = "https://en.wikipedia.org/w/api.php?action=opensearch&limit=20&format=json&search=";
-
 class SongInfo extends Component {
     constructor() {
         super();
@@ -15,15 +12,18 @@ class SongInfo extends Component {
         }
 
         this.state = {
-            loggedIn: token ? true : false,
+            loggedIn: !!token, // true or false
             currentlyPlaying: false,
             nowPlaying: {
+                id: '',
                 name: '',
                 artist: '',
                 albumArt: '',
                 releaseDate: ''
             },
-            description: ''
+            description: '',
+            key: '',
+            mode: ''
         }
     }
 
@@ -40,21 +40,38 @@ class SongInfo extends Component {
         return hashParams;
     }
 
+    getMusicalKey = (id) => {
+        const keys = ['C', 'C#/Db', 'D', 'D#/Eb', 'E', 'F', 'F#/Gb', 'G', 'G#/Ab', 'A', 'A#/Bb', 'B'];
+        const modes = ['minor', 'major']
+        spotifyApi.getAudioAnalysisForTrack(id)
+            .then((response) => {
+                const { key, mode } = response.track;
+                console.log('Key:', keys[key], modes[mode]);
+                this.setState({
+                    key: keys[key],
+                    mode: modes[mode]
+                })
+            }).catch(() => console.log('Unable to get musical key'));
+    }
+
+
     //Setting the state of the current song details from the Spotify API
     getNowPlaying = () => {
         spotifyApi.getMyCurrentPlaybackState()
             .then((response) => {
-                const { name = "nn", album = "na", artists = "naa" } = response.item;
+                const { id = "id", name = "nn", album = "na", artists = "naa" } = response.item;
                 this.setState({
                     currentlyPlaying: true,
                     nowPlaying: {
+                        id: id,
                         name: name,
                         albumArt: album.images[0].url,
                         artist: artists[0].name,
                         releaseDate: album.release_date
                     }
                 })
-                console.log('song playing', this.state.currentlyPlaying)
+                console.log('song playing', this.state.currentlyPlaying);
+                this.getMusicalKey(id);
             }).catch(() => (this.setState({
                 currentlyPlaying: false
             })));
@@ -73,15 +90,22 @@ class SongInfo extends Component {
 
     // Takes in an artist name as a search term and uses the 
     // Wikipedia API to get a JSON response of a description
+
     getWiki = (term) => {
         const proxyurl = "https://cors-anywhere.herokuapp.com/";
-        fetch(proxyurl + searchUrl + "/" + term)
+        const url = "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles="
+        fetch(proxyurl + url + term) // https://cors-anywhere.herokuapp.com/https://example.com
             .then(response => response.json())
             .then(contents => {
-                this.setState({
-                    description: contents[2][0]
-                });
-            }).catch(() => console.log("Can’t access " + searchUrl + " response. Blocked by browser?"))
+                for (const objkey in contents.query.pages) {
+                    //there is an attribut that is based on the id of the page. The name isn't known, so I loop through all objects (but there is only one)
+                    const extractedDescription = contents.query.pages[objkey].extract;
+                    this.setState({
+                        description: extractedDescription
+                    });
+                }
+
+            }).catch(() => console.log("Can’t access " + url + term + " response."))
     }
 
     componentDidMount() {
@@ -92,6 +116,7 @@ class SongInfo extends Component {
 
     render() {
         const { name, artist, albumArt, releaseDate } = this.state.nowPlaying;
+        const { description, key, mode } = this.state;
         return (
             <div className="songInfo" >
 
@@ -109,12 +134,17 @@ class SongInfo extends Component {
 
                 {/* Song name */}
                 <div>
-                    {name && <p>Now Playing: {name}</p>}
+                    {name && <p>Now Playing: <b>{name}</b></p>}
                 </div>
 
                 {/* Artist name */}
                 <div>
-                    {artist && <p>Artist: {artist}</p>}
+                    {artist && <p>Artist: <b>{artist}</b></p>}
+                </div>
+
+                {/* Artist name */}
+                <div>
+                    {key && mode && <p>Key: <b>{key} {mode}</b></p>}
                 </div>
 
                 {/* Checking to see if there is alubm art and then rendering it if true*/}
@@ -123,7 +153,7 @@ class SongInfo extends Component {
                 </div>
 
                 {/* Function call to format the realse date from dd/mm/yyyy to mm dd, yyyy */}
-                {/* && used to only show a date when it is available*/}
+                {/* && used to only show a date when it is available */}
                 <div>
                     {releaseDate && this.formatReleaseDate(releaseDate)}
                 </div>
@@ -141,7 +171,7 @@ class SongInfo extends Component {
 
                 {/* Rendering description */}
                 <div>
-                    <p className="description"> {this.state.description}</p>
+                    <p className="description"> {description}</p>
                 </div>
             </div>
         );
