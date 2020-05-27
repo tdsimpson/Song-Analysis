@@ -130,66 +130,69 @@ class SongInfo extends Component {
         const { name, artist, albumArt, releaseDate } = this.state.nowPlaying;
         const { description, key, mode, tempo } = this.state;
         return (
-            <div className="songInfo" >
 
-                {!this.state.currentlyPlaying && this.state.loggedIn ? <p>No music playing</p> : ''}
 
-                {!this.state.loggedIn && <a href='http://localhost:8888' > Login to Spotify </a>}
 
-                {this.state.loggedIn && this.state.currentlyPlaying &&
-                    <button
-                        id="spotify-button"
-                        onClick={() => this.getNowPlaying()}>
-                        Check Now Playing
+            <Palette src={albumArt}>
+                {({ data, loading, error }) => (
+
+                    <div className="songInfo" style={{ backgroundColor: data.darkMuted }}>
+
+                        <div className="header">
+                            <p className="header__title"><b>SONG ANALYSIS</b></p>
+                        </div>
+
+                        {!this.state.currentlyPlaying && this.state.loggedIn ? <p>No music playing</p> : ''}
+
+                        {!this.state.loggedIn && <a href='http://localhost:8888' > Login to Spotify </a>}
+
+                        {this.state.loggedIn && this.state.currentlyPlaying &&
+                            <button
+                                id="spotify-button"
+                                style={{ background: data.vibrant }}
+                                onClick={() => this.getNowPlaying()}>
+                                Check Now Playing
                     </button>
-                }
+                        }
 
-                <div className="picture-text">
-                    <div>
-                        {albumArt && <img className="album" src={albumArt} alt="Album art not found" />}
-                    </div>
-                    <div className="text-section">
-                        {artist && <p><b>NOW PLAYING</b></p>}
-                        {artist && <p><b>{artist}</b></p>}
-                        {name && <p><b>{name}</b></p>}
-                        {key && mode && <p><b>{key} {mode}</b></p>}
-                        {tempo && <p><b>{`${tempo} BPM`}</b></p>}
-                        {releaseDate && releaseDate}
-                    </div>
-                </div>
+                        <div className="picture-text">
+                            <div>
+                                {albumArt && <img className="album" src={albumArt} alt="Album art not found" />}
+                            </div>
+                            <div className="text-section" >
+                                <div style={{ color: data.vibrant }}>
+                                    {artist && <p><b>NOW PLAYING</b></p>}
+                                </div>
+                                {artist && <p><b>{artist}</b></p>}
+                                {name && <p><b>{name}</b></p>}
+                                {key && mode && <p><b>{key} {mode}</b></p>}
+                                {tempo && <p><b>{`${tempo} BPM`}</b></p>}
+                                {releaseDate && releaseDate}
+                            </div>
+                        </div>
 
-                {/* Calling a function to get the artist descriptoino form Wikipedia */}
+                        {/* Calling a function to get the artist descriptoino form Wikipedia */}
 
-                <div>
-                    {artist &&
-                        <button
-                            className="description-button"
-                            onClick={() => this.getWiki(artist)}>
-                            Artist Description
-                        </button>
-                    }
-                </div>
-
-
-                {/* Rendering description */}
-                <div>
-                    <p className="description"> {description}</p>
-                </div>
-
-                <Palette src={albumArt}>
-                    {({ data, loading, error }) => (
                         <div>
-                            <div style={{ color: data.vibrant }}>
-                                Text with the vibrant color
+                            {artist &&
+                                <button
+                                    className="description-button"
+                                    onClick={() => this.getWiki(artist)}>
+                                    Artist Description
+                        </button>
+                            }
                         </div>
-                            <div style={{ color: data.darkMuted }}>
-                                Text with the muted dark color
-                        </div>
-                        </div>
-                    )}
-                </Palette>
 
-            </div>
+
+                        {/* Rendering description */}
+                        <div>
+                            <p className="description"> {description}</p>
+                        </div>
+
+                    </div>
+
+                )}
+            </Palette>
         );
     }
 }

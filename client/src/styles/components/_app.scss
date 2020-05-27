@@ -6,6 +6,10 @@
   text-align: center;
 }
 
+.header__title {
+  color: white;
+}
+
 #spotify-button {
   margin: 15px;
   background: $spotify-green;
@@ -50,6 +54,7 @@
 
 .text-section {
   text-align: left;
+  color: white;
 }
 
 .picture-text {
@@ -68,5 +73,6 @@
 
   .text-section {
     text-align: center;
+
   }
 }
