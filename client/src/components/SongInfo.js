@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Palette } from 'react-palette';
 import SpotifyWebApi from 'spotify-web-api-js';
 const spotifyApi = new SpotifyWebApi();
 
@@ -23,7 +24,8 @@ class SongInfo extends Component {
             },
             description: '',
             key: '',
-            mode: ''
+            mode: '',
+            tempo: ''
         }
     }
 
@@ -45,11 +47,13 @@ class SongInfo extends Component {
         const modes = ['minor', 'major']
         spotifyApi.getAudioAnalysisForTrack(id)
             .then((response) => {
-                const { key, mode } = response.track;
+                const { key, mode, tempo } = response.track;
                 console.log('Key:', keys[key], modes[mode]);
+                console.log('tempo', Math.floor(tempo));
                 this.setState({
                     key: keys[key],
-                    mode: modes[mode]
+                    mode: modes[mode],
+                    tempo: Math.floor(tempo)
                 })
             }).catch(() => console.log('Unable to get musical key'));
     }
@@ -67,7 +71,7 @@ class SongInfo extends Component {
                         name: name,
                         albumArt: album.images[0].url,
                         artist: artists[0].name,
-                        releaseDate: album.release_date
+                        releaseDate: this.formatReleaseDate(album.release_date)
                     }
                 })
                 console.log('song playing', this.state.currentlyPlaying);
@@ -77,15 +81,25 @@ class SongInfo extends Component {
             })));
     }
 
-    //Formatting the realse date from dd/mm/yyyy to mm dd, yyyy 
+    //Formatting the realse date from yyyy-mm-dd to mm dd, yyyy 
     formatReleaseDate = (date) => {
         let selectMonth = ["January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"];
 
-        let month = selectMonth[parseInt(date.slice(5, 7) - 1)]
-        let day = date.slice(8, 10)
+        // Some songs don't specify a day or month, so set it as blank
+        let month = "";
+        let day = "";
         let year = date.slice(0, 4)
-        return month + " " + day + ", " + year;
+
+        if (date.slice(5, 6)) {
+            month = selectMonth[parseInt(date.slice(5, 6))]
+        }
+
+        if (date.slice(8, 10)) {
+            day = date.slice(8, 10) + ", "; //adding the comma so it only shows up if there is a day
+        }
+
+        return month + " " + day + year;
     }
 
     // Takes in an artist name as a search term and uses the 
@@ -112,11 +126,9 @@ class SongInfo extends Component {
         this.getNowPlaying();
     }
 
-
-
     render() {
         const { name, artist, albumArt, releaseDate } = this.state.nowPlaying;
-        const { description, key, mode } = this.state;
+        const { description, key, mode, tempo } = this.state;
         return (
             <div className="songInfo" >
 
@@ -132,33 +144,22 @@ class SongInfo extends Component {
                     </button>
                 }
 
-                {/* Song name */}
-                <div>
-                    {name && <p>Now Playing: <b>{name}</b></p>}
-                </div>
-
-                {/* Artist name */}
-                <div>
-                    {artist && <p>Artist: <b>{artist}</b></p>}
-                </div>
-
-                {/* Artist name */}
-                <div>
-                    {key && mode && <p>Key: <b>{key} {mode}</b></p>}
-                </div>
-
-                {/* Checking to see if there is alubm art and then rendering it if true*/}
-                <div>
-                    {albumArt && <img src={albumArt} alt="Album art not found" style={{ height: 150 }} />}
-                </div>
-
-                {/* Function call to format the realse date from dd/mm/yyyy to mm dd, yyyy */}
-                {/* && used to only show a date when it is available */}
-                <div>
-                    {releaseDate && this.formatReleaseDate(releaseDate)}
+                <div className="picture-text">
+                    <div>
+                        {albumArt && <img className="album" src={albumArt} alt="Album art not found" />}
+                    </div>
+                    <div className="text-section">
+                        {artist && <p><b>NOW PLAYING</b></p>}
+                        {artist && <p><b>{artist}</b></p>}
+                        {name && <p><b>{name}</b></p>}
+                        {key && mode && <p><b>{key} {mode}</b></p>}
+                        {tempo && <p><b>{`${tempo} BPM`}</b></p>}
+                        {releaseDate && releaseDate}
+                    </div>
                 </div>
 
                 {/* Calling a function to get the artist descriptoino form Wikipedia */}
+
                 <div>
                     {artist &&
                         <button
@@ -169,10 +170,25 @@ class SongInfo extends Component {
                     }
                 </div>
 
+
                 {/* Rendering description */}
                 <div>
                     <p className="description"> {description}</p>
                 </div>
+
+                <Palette src={albumArt}>
+                    {({ data, loading, error }) => (
+                        <div>
+                            <div style={{ color: data.vibrant }}>
+                                Text with the vibrant color
+                        </div>
+                            <div style={{ color: data.darkMuted }}>
+                                Text with the muted dark color
+                        </div>
+                        </div>
+                    )}
+                </Palette>
+
             </div>
         );
     }

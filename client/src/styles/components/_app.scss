@@ -2,10 +2,6 @@
   text-align: center;
 }
 
-div {
-  margin: 15px;
-}
-
 .header {
   text-align: center;
 }
@@ -16,7 +12,6 @@ div {
   border: none;
   color: white;
   padding: 10px 20px;
-  text-align: center;
   text-decoration: none;
   display: inline-block;
   margin: 4px 2px;
@@ -41,10 +36,37 @@ div {
   border: none;
   color: white;
   padding: 10px 20px;
-  text-align: center;
   text-decoration: none;
   display: inline-block;
   margin: 4px 2px;
   border-radius: 20px;
   outline: 0;
+}
+
+.album {
+  max-width: 340px;
+  margin: 0 auto;
+}
+
+.text-section {
+  text-align: left;
+}
+
+.picture-text {
+  margin: 50px 0 50px 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+@media (max-width: 600px) {
+  .picture-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .text-section {
+    text-align: center;
+  }
 }

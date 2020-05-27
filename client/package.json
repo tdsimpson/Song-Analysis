@@ -3,8 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "color-thief-react": "^1.0.2",
+    "colorthief": "^2.3.0",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
+    "react-palette": "^1.0.2",
     "react-scripts": "3.2.0",
     "spotify-web-api-js": "^0.22.1"
   },
