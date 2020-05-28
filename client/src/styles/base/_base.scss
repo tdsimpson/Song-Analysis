@@ -1,22 +1,40 @@
+@font-face {
+    font-family: WoodfordBourne;
+    src: url(fonts/WoodfordBournePRO-Regular.otf);
+    font-style: normal;
+    font-weight: 100;
+
+}
+
+
+
+
 body {
     background: #F7F7F7;
     margin: 0;
     font-family: -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
+        "WoodfordBourne",
         "Roboto",
         "Oxygen",
+        "Helvetica Neue",
+        BlinkMacSystemFont,
+        "Segoe UI",
+
+
         "Ubuntu",
         "Cantarell",
         "Fira Sans",
         "Droid Sans",
-        "Helvetica Neue",
         sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Helvetica Neue",
         monospace;
+}
+
+ul {
+    margin: 0;
 }

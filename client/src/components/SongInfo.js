@@ -132,43 +132,44 @@ class SongInfo extends Component {
         return (
 
 
-
             <Palette src={albumArt}>
                 {({ data, loading, error }) => (
 
                     <div className="songInfo" style={{ backgroundColor: data.darkMuted }}>
 
-                        <div className="header">
-                            <p className="header__title"><b>SONG ANALYSIS</b></p>
+                        <div className="app-title">
+                            SONG ANALYSIS
                         </div>
 
-                        {!this.state.currentlyPlaying && this.state.loggedIn ? <p>No music playing</p> : ''}
+                        {!this.state.currentlyPlaying && this.state.loggedIn ? <p style={{ color: '#fff' }}>No music playing</p> : ''}
 
                         {!this.state.loggedIn && <a href='http://localhost:8888' > Login to Spotify </a>}
+
 
                         {this.state.loggedIn && this.state.currentlyPlaying &&
                             <button
                                 id="spotify-button"
-                                style={{ background: data.vibrant }}
+                                style={{ background: data.darkMuted }}
                                 onClick={() => this.getNowPlaying()}>
                                 Check Now Playing
                     </button>
                         }
 
                         <div className="picture-text">
+
                             <div>
                                 {albumArt && <img className="album" src={albumArt} alt="Album art not found" />}
                             </div>
+
                             <div className="text-section" >
-                                <div style={{ color: data.vibrant }}>
-                                    {artist && <p><b>NOW PLAYING</b></p>}
-                                </div>
-                                {artist && <p><b>{artist}</b></p>}
-                                {name && <p><b>{name}</b></p>}
-                                {key && mode && <p><b>{key} {mode}</b></p>}
-                                {tempo && <p><b>{`${tempo} BPM`}</b></p>}
+                                {artist && <div className="now-playing" style={{ color: data.vibrant }}><b>NOW PLAYING</b></div>}
+                                {artist && <div className="artist-name"><b>{artist}</b></div>}
+                                {name && <div className="song-name">{name}</div>}
+                                {key && mode && <p>{key} {mode}</p>}
+                                {tempo && <p>{`${tempo} BPM`}</p>}
                                 {releaseDate && releaseDate}
                             </div>
+
                         </div>
 
                         {/* Calling a function to get the artist descriptoino form Wikipedia */}
@@ -177,11 +178,13 @@ class SongInfo extends Component {
                             {artist &&
                                 <button
                                     className="description-button"
+                                    style={{ color: data.vibrant }}
                                     onClick={() => this.getWiki(artist)}>
-                                    Artist Description
-                        </button>
+                                    <b>ABOUT THE ARTIST</b>
+                                </button>
                             }
                         </div>
+
 
 
                         {/* Rendering description */}
