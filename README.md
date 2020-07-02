@@ -1,9 +1,19 @@
-# Song-Analysis
+<!-- ABOUT THE PROJECT -->
+## About The Project
+
 A web app displaying additional information about the song you are currently listening to on Spotify including it's musical key, beats per minute (BPM) and a short bio about the artist. The background and accent colours will also change for each song, based on the most prominant colours from the album art. 
 
-<img src="images/example-dualipa-dontstartnow.png" height=180px> <img src="images/example-samfender-holdout.png" height=180px> 
-<img src="images/example-danielcaesar-blessed.png" height=180px>
+<img src="images/example-dualipa-dontstartnow.png" height=150px> <img src="images/example-samfender-holdout.png" height=150px> 
+<img src="images/example-danielcaesar-blessed.png" height=150px>
 
+### Built With
+* [React.js](https://reactjs.org/)
+* [SASS](https://sass-lang.com/)
+* [Spoitify API](https://developer.spotify.com/documentation/web-api/)
+* [Wikipedia API](https://www.mediawiki.org/wiki/API:Main_page)
+
+
+## Getting Started
 
 ### Installation
 1. Clone the github respository.
