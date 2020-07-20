@@ -8,7 +8,7 @@ A web app displaying additional information about the song you are currently lis
 
 ### Built With
 * [React.js](https://reactjs.org/)
-* [SASS](https://sass-lang.com/)
+* [SCSS](https://sass-lang.com/documentation/syntax)
 * [Spoitify API](https://developer.spotify.com/documentation/web-api/)
 * [Wikipedia API](https://www.mediawiki.org/wiki/API:Main_page)
 
