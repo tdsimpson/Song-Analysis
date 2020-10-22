@@ -3,6 +3,8 @@
 
 A web app displaying additional information about the song you are currently listening to on Spotify including it's musical key, beats per minute (BPM) and a short bio about the artist. The background and accent colours also change for each song based on the most prominant colours from the album art. 
 
+Demo video: https://www.youtube.com/watch?v=O5B2sth-wxs
+
 <img src="images/example-dualipa-dontstartnow.png" height=150px> <img src="images/example-samfender-holdout.png" height=150px> 
 <img src="images/example-danielcaesar-blessed.png" height=150px>
 
