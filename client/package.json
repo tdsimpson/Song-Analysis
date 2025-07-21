@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "color-thief-react": "^1.0.2",
-    "colorthief": "^2.3.0",
+    "colorthief": "^2.6.0",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
     "react-palette": "^1.0.2",
